@@ -37,7 +37,7 @@ public class MemberController {
 			model.addAttribute("totalPages",
 					service.getTotalPages(NUM_PER_PAGE));
 
-		return "/admins/club/memberslist";
+		return "admins/club/memberslist";
 	}
 	
 	@GetMapping("/members/add")
@@ -45,7 +45,7 @@ public class MemberController {
 		model.addAttribute("title", "会員の追加");
 		model.addAttribute("member", new Member());
 		model.addAttribute("types", service.getTypeList());
-		return "/admins/club/membersave";
+		return "admins/club/membersave";
 	}
 		
 	@PostMapping("/members/add")
@@ -57,7 +57,7 @@ public class MemberController {
 		if(errors.hasErrors()) {
 			model.addAttribute("title", "会員の追加");
 			model.addAttribute("types",service.getTypeList());
-			return "/admins/club/memberslist";
+			return "admins/club/memberslist";
 		}
 		
 		service.addMember(member);
@@ -69,7 +69,7 @@ public class MemberController {
 		model.addAttribute("title", "会員情報の変更");
 		model.addAttribute("member", service.getMemberById(id));
 		model.addAttribute("types", service.getTypeList());
-		return "/admins/club/membersave";
+		return "admins/club/membersave";
 		
 	}
 	@PostMapping("/edit/{id}")
@@ -82,7 +82,7 @@ public class MemberController {
 	 if(errors.hasErrors()) {
 	 model.addAttribute("title", "会員情報の変更");
 	 model.addAttribute("types", service.getTypeList());
-	 return "/admins/club/membersave";
+	 return "admins/club/membersave";
 	 }
 	 member.setId(id); //更新に必要な会員 ID をセット
 	 service.editMember(member);
