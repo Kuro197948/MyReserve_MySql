@@ -15,9 +15,9 @@
 
     <!-- グローバルエラー（ID/パス間違いなど） -->
     <div class="alert alert-danger"
-         th:if="${#fields.hasGlobalErrors()}"
-         th:errors="*{global}">
-      エラー
+         th:if="${#fields.hasGlobalErrors()}">
+		 <div th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+      
     </div>
 
     <div class="mb-3">

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.app.domain.Member;
@@ -40,7 +41,8 @@ public class MemberLoginController {
     }
 
     @PostMapping("/members/memberslogin")
-    public String login(@Valid MemberLoginForm form, Errors errors, Model model) {
+    public String login(
+    		@ModelAttribute("form")@Valid MemberLoginForm form, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             return "members/memberslogin";
