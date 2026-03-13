@@ -25,6 +25,11 @@ public class MemberRegisterServiceImpl implements MemberRegisterService {
     @Override
     public MemberRegisterResult register(MemberRegisterForm form) {
 
+        Member existingMember = memberMapper.selectByEmail(form.getEmail());
+        if (existingMember != null) {
+            throw new IllegalArgumentException("このメールアドレスは既に登録されています。");
+        }
+
         Member member = new Member();
         member.setName(form.getName());
         member.setEmail(form.getEmail());
@@ -32,7 +37,7 @@ public class MemberRegisterServiceImpl implements MemberRegisterService {
         member.setCreated(LocalDateTime.now());
 
         MemberType type = new MemberType();
-        type.setId(form.getTypeId());
+        type.setId(1);
         member.setType(type);
 
         memberMapper.insert(member);

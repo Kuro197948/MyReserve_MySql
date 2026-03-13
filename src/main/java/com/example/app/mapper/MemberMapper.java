@@ -15,6 +15,8 @@ public interface MemberMapper {
     Member selectByName(String name);
 
     Member selectByEmail(String email);
+    
+    
 
     // ページ分割機能用
     List<Member> selectLimited(@Param("offset") int offset,
