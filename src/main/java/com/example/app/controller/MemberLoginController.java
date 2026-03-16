@@ -26,11 +26,10 @@ public class MemberLoginController {
 
     private final MemberAuthService service;
     private final HttpSession session;
-    private final NewsService newsService; 
-    
+    private final NewsService newsService;
+
     @GetMapping("/members/memberslogin")
     public String showMembersLogin(Model model) {
-    	System.out.println("✅ showMembersLogin hit"); // ←追加
 
         if (session.getAttribute("memberId") != null) {
             return "redirect:/members/club/home";
@@ -63,14 +62,14 @@ public class MemberLoginController {
 
         return "redirect:/members/club/home";
     }
+
     @GetMapping("/members/club/home")
     public String memberShowHome(Model model) {
-    	//最新ニュースを取得
-    	List<News> latestNews = newsService.getNewsList();
-    	if (latestNews.size() > 5) {
-    		latestNews = latestNews.subList(0,  5);
-    	}
-    	model.addAttribute("latestNews", newsService.getLatestWithDetail(3));
+        List<News> latestNews = newsService.getNewsList();
+        if (latestNews.size() > 5) {
+            latestNews = latestNews.subList(0, 5);
+        }
+        model.addAttribute("latestNews", newsService.getLatestWithDetail(3));
         return "members/club/home";
     }
 
