@@ -1,8 +1,9 @@
 package com.example.app.service;
 
+import com.example.app.domain.Admin;
+
 public interface AdminService {
-		
-		boolean login(String loginId,
-				String loginPass);
-		
+
+    Admin authenticate(String loginId, String loginPass);
+
 }

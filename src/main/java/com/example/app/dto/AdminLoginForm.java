@@ -1,4 +1,4 @@
-package com.example.app.domain;
+package com.example.app.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class AdminLoginForm {
 	
-	private Integer id;
 	
 	@NotBlank
 	private String loginId;

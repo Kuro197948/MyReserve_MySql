@@ -1,9 +1,12 @@
 package com.example.app.mapper;
 
-import com.example.app.domain.AdminLoginForm;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import com.example.app.domain.Admin;
+
+@Mapper
 public interface AdminMapper {
 
-	AdminLoginForm selectByLoginId(String loginId);
-	
+    Admin selectByLoginId(@Param("loginId") String loginId);
 }
