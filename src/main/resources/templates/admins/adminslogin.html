@@ -13,49 +13,37 @@
 
   <h1 class="mb-4 text-center">管理者ログイン</h1>
 
-  <th:block th:if="${session.loginId}">
-  
-    <div class="d-grid gap-2">
-      <a class="btn btn-primary" th:href="@{/admins/club/memberslist}">
-        会員一覧
-      </a>
+  <form th:action="@{/admins/adminslogin}" th:object="${admin}" method="post">
 
-      <a class="btn btn-primary" th:href="@{/news}">
-       新着情報一覧
-      </a>
+    <!-- ログイン失敗メッセージ -->
+    <div class="alert alert-danger"
+         th:if="${#fields.hasErrors('loginId')}"
+         th:errors="*{loginId}">
     </div>
 
-  </th:block>
-
-  <th:block th:unless="${session.loginId}">
-
-    <form th:action="@{/admins/adminslogin}" th:object="${admin}" method="post">
-
-      <!-- エラー表示 -->
-      <div class="alert alert-danger"
+    <div class="mb-3">
+      <label class="form-label" for="loginId">ログインID</label>
+      <input type="text" id="loginId" class="form-control" th:field="*{loginId}">
+      <div class="text-danger small"
            th:if="${#fields.hasErrors('loginId')}"
            th:errors="*{loginId}">
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">ログインID</label>
-        <input type="text" class="form-control" th:field="*{loginId}">
-        <div class="text-danger small" th:errors="*{loginId}"></div>
+    <div class="mb-3">
+      <label class="form-label" for="loginPass">パスワード</label>
+      <input type="password" id="loginPass" class="form-control" th:field="*{loginPass}">
+      <div class="text-danger small"
+           th:if="${#fields.hasErrors('loginPass')}"
+           th:errors="*{loginPass}">
       </div>
+    </div>
 
-      <div class="mb-3">
-        <label class="form-label">パスワード</label>
-        <input type="password" class="form-control" th:field="*{loginPass}">
-        <div class="text-danger small" th:errors="*{loginPass}"></div>
-      </div>
+    <button class="btn btn-primary w-100" type="submit">
+      ログイン
+    </button>
 
-      <button class="btn btn-primary w-100" type="submit">
-        ログイン
-      </button>
-
-    </form>
-
-  </th:block>
+  </form>
 
 </div>
 

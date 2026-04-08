@@ -5,71 +5,82 @@ import jakarta.validation.Valid;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.app.domain.Member;
 import com.example.app.domain.PasswordResetToken;
-import com.example.app.domain.PasswordSetupForm;
-import com.example.app.mapper.MemberMapper;
+import com.example.app.dto.PasswordSetupForm;
+import com.example.app.service.MemberService;
 import com.example.app.service.PasswordResetService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/members/password")
 public class PasswordSetupController {
 
     private final PasswordResetService passwordResetService;
-    private final MemberMapper memberMapper;
+    private final MemberService memberService;
 
-    @GetMapping("/members/password/setup")
-    public String showPasswordSetup(
-            @RequestParam("token") String token,
-            Model model) {
+    @GetMapping("/setup")
+    public String showForm(@RequestParam String token, Model model) {
 
-        PasswordResetToken passwordResetToken = passwordResetService.findValidToken(token);
+        PasswordResetToken resetToken = passwordResetService.findValidToken(token);
 
-        if (passwordResetToken == null) {
-            model.addAttribute("errorMessage", "無効または期限切れのトークンです。");
-            return "members/passwordSetupError";
+        if (resetToken == null) {
+            return "error/invalid-token";
         }
 
         PasswordSetupForm form = new PasswordSetupForm();
         form.setToken(token);
 
         model.addAttribute("form", form);
-        return "members/passwordSetup";
+        return "members/setup-password";
     }
 
-    @PostMapping("/members/password/setup")
-    public String setupPassword(
-            @Valid PasswordSetupForm form,
-            Errors errors,
-            Model model) {
+    @PostMapping("/setup")
+    public String submit(
+            @ModelAttribute("form") @Valid PasswordSetupForm form,
+            BindingResult result) {
 
-        PasswordResetToken passwordResetToken = passwordResetService.findValidToken(form.getToken());
-
-        if (passwordResetToken == null) {
-            model.addAttribute("errorMessage", "無効または期限切れのトークンです。");
-            return "members/passwordSetupError";
+        if (result.hasErrors()) {
+            return "members/setup-password";
         }
 
         if (!form.getPassword().equals(form.getConfirmPassword())) {
-            errors.rejectValue("confirmPassword", "error.password.mismatch", "確認用パスワードが一致しません。");
+            result.rejectValue(
+                    "confirmPassword",
+                    "error.confirmPassword",
+                    "確認用パスワードが一致しません"
+            );
+            return "members/setup-password";
         }
 
-        if (errors.hasErrors()) {
-            return "members/passwordSetup";
+        PasswordResetToken resetToken = passwordResetService.findValidToken(form.getToken());
+
+        if (resetToken == null) {
+            return "error/invalid-token";
         }
 
-        String hashedPassword = BCrypt.hashpw(form.getPassword(), BCrypt.gensalt());
+        Member member = memberService.getMemberById(resetToken.getMemberId());
 
-        memberMapper.updatePasswordById(passwordResetToken.getMemberId(), hashedPassword);
+        if (member == null) {
+            return "error/invalid-token";
+        }
+
+        member.setEmail(form.getEmail());
+        member.setLoginPass(BCrypt.hashpw(form.getPassword(), BCrypt.gensalt()));
+
+        memberService.updateCredentials(member);
 
         passwordResetService.deleteToken(form.getToken());
 
-        return "members/passwordSetupComplete";
+        return "redirect:/members/club/home";
     }
 }

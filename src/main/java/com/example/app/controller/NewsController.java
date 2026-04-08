@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.NewsForm;
-import com.example.app.service.MemberAdminService;
+import com.example.app.service.MemberService;
 import com.example.app.service.NewsService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class NewsController {
 
 	
  private final NewsService newsService;
- private final MemberAdminService memberService;
+ private final MemberService memberService;
 
  @GetMapping("/announcements")
  public String list(Model model) {

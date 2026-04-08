@@ -15,52 +15,55 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional(rollbackFor = Exception.class)
 @RequiredArgsConstructor
-public class MemberServiceImpl implements MemberAdminService {
-		
-	private final MemberMapper memberMapper;
-	private final MemberTypeMapper memberTypeMapper;
-	
-	@Override
-	public List<Member> getMemberList(){
-		return memberMapper.selectAll();
-	}
-	
-	@Override
-	public Member getMemberById(Integer id) {
-		return memberMapper.selectById(id);
-	}
-	
-	@Override
-	 public List<Member> getMemberListByPage(int page, int numPerPage) {
-	 int offset = numPerPage * (page - 1);
-	 return memberMapper.selectLimited(offset, numPerPage);
-	 }
-	
-	@Override
-	 public int getTotalPages(int numPerPage) {
-	 double totalNum = (double) memberMapper.count();
-	 return (int) Math.ceil(totalNum / numPerPage);
-	}
-	
-	@Override
-	public void addMember(Member member) {
-		memberMapper.insert(member);
-	}
-	
-	@Override
-	public void editMember(Member member) {
-		memberMapper.update(member);
-	}
-	
-	@Override
-	public void deleteMember(Integer id) {
-		memberMapper.delete(id);
-	}
-	
-	@Override
-	public List<MemberType> getTypeList(){
-		return memberTypeMapper.selectAll();
-	}
-	
-	
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberMapper memberMapper;
+    private final MemberTypeMapper memberTypeMapper;
+
+    @Override
+    public List<Member> getMemberList() {
+        return memberMapper.selectAll();
+    }
+
+    @Override
+    public Member getMemberById(Integer id) {
+        return memberMapper.selectById(id);
+    }
+
+    @Override
+    public List<Member> getMemberListByPage(int page, int numPerPage) {
+        int offset = numPerPage * (page - 1);
+        return memberMapper.selectLimited(offset, numPerPage);
+    }
+
+    @Override
+    public int getTotalPages(int numPerPage) {
+        double totalNum = (double) memberMapper.count();
+        return (int) Math.ceil(totalNum / numPerPage);
+    }
+
+    @Override
+    public void addMember(Member member) {
+        memberMapper.insert(member);
+    }
+
+    @Override
+    public void editMember(Member member) {
+        memberMapper.update(member);
+    }
+
+    @Override
+    public void deleteMember(Integer id) {
+        memberMapper.delete(id);
+    }
+
+    @Override
+    public List<MemberType> getTypeList() {
+        return memberTypeMapper.selectAll();
+    }
+
+    @Override
+    public void updateCredentials(Member member) {
+        memberMapper.updateCredentialsById(member);
+    }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.Member;
-import com.example.app.service.MemberAdminService;
+import com.example.app.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +25,7 @@ public class MemberController {
 	//1ページあたりの表示人数
 	private final int NUM_PER_PAGE = 5;
 	
-	private final MemberAdminService service;
+	private final MemberService service;
 	
 	@GetMapping("/memberslist")
 	public String list(

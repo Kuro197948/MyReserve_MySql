@@ -60,25 +60,26 @@
         SELECT COUNT(*) FROM members
     </select>
 
-   <insert id="insert"
+    <insert id="insert"
         parameterType="com.example.app.domain.Member"
         useGeneratedKeys="true"
         keyProperty="id">
-    INSERT INTO members (
-        name,
-        email,
-        login_pass,
-        type_id,
-        created
-    ) VALUES (
-        #{name},
-        #{email},
-        #{loginPass},
-        #{type.id},
-        #{created}
-    )
-</insert>
+        INSERT INTO members (
+            name,
+            email,
+            login_pass,
+            type_id,
+            created
+        ) VALUES (
+            #{name},
+            #{email},
+            #{loginPass},
+            #{type.id},
+            #{created}
+        )
+    </insert>
 
+    <!-- 通常の会員編集用 -->
     <update id="update" parameterType="com.example.app.domain.Member">
         UPDATE members
         SET
@@ -88,9 +89,20 @@
         WHERE id = #{id}
     </update>
 
+    <!-- パスワードだけ更新 -->
     <update id="updatePasswordById">
         UPDATE members
-        SET login_pass = #{loginPass}
+        SET
+            login_pass = #{loginPass}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 初回設定・認証情報更新用 -->
+    <update id="updateCredentialsById" parameterType="com.example.app.domain.Member">
+        UPDATE members
+        SET
+            email = #{email},
+            login_pass = #{loginPass}
         WHERE id = #{id}
     </update>
 

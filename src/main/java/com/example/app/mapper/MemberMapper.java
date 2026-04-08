@@ -2,10 +2,12 @@ package com.example.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.example.app.domain.Member;
 
+@Mapper
 public interface MemberMapper {
 
     List<Member> selectAll();
@@ -15,21 +17,18 @@ public interface MemberMapper {
     Member selectByName(String name);
 
     Member selectByEmail(String email);
-    
-    
 
-    // ページ分割機能用
-    List<Member> selectLimited(@Param("offset") int offset,
-                               @Param("limit") int limit);
+    List<Member> selectLimited(@Param("offset") int offset, @Param("limit") int limit);
 
-    Long count();
+    long count();
 
     void insert(Member member);
 
     void update(Member member);
 
-    void updatePasswordById(@Param("id") Integer id,
-                            @Param("loginPass") String loginPass);
+    void updatePasswordById(@Param("id") Integer id, @Param("loginPass") String loginPass);
+
+    void updateCredentialsById(Member member);
 
     void delete(Integer id);
 }
